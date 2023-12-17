@@ -62,6 +62,13 @@ class Tree {
     }
   }
 
+  find(root: Node | null, data: number): Node | null {
+    if (!root) return null;
+    else if (root.data === data) return root;
+    else if (data < (root.data as number)) return this.find(root.left, data);
+    else return this.find(root.right, data);
+  }
+
   prettyPrint(node: Node, prefix = "", isLeft = true) {
     if (node === null) {
       return;
@@ -82,4 +89,5 @@ class Tree {
 
 // const tree = new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
 // tree.delete(tree.root, 6345);
+// console.log(tree.find(tree.root, 67));
 // tree.prettyPrint(tree.root);
