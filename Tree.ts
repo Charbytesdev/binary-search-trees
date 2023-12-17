@@ -24,6 +24,44 @@ class Tree {
     return root;
   }
 
+  insert(root: Node | null, data: number) {
+    if (root == null) {
+      root = new Node(data);
+      return root;
+    } else {
+      if (data < (root.data as number))
+        root.left = this.insert(root.left, data);
+      else root.right = this.insert(root.right, data);
+    }
+    return root;
+  }
+
+  delete(root: Node | null, data: number): Node | null {
+    if (!root) {
+      return root;
+    } else if (data > (root.data as number)) {
+      root.right = this.delete(root.right, data) as Node;
+      return root;
+    } else if (data < (root.data as number)) {
+      root.left = this.delete(root.left, data) as Node;
+      return root;
+    } else {
+      if (!root.left) {
+        return root.right;
+      } else if (!root.right) {
+        return root.left;
+      }
+
+      let tempNode = root.right;
+      while (tempNode.left) {
+        tempNode = tempNode.left;
+      }
+      root.data = tempNode.data as number;
+      root.right = this.delete(root.right, tempNode.data as number) as Node;
+      return root;
+    }
+  }
+
   prettyPrint(node: Node, prefix = "", isLeft = true) {
     if (node === null) {
       return;
@@ -43,4 +81,5 @@ class Tree {
 }
 
 // const tree = new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
-// console.log(tree.prettyPrint(tree.root));
+// tree.delete(tree.root, 6345);
+// tree.prettyPrint(tree.root);
