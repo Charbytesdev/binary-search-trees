@@ -69,6 +69,28 @@ class Tree {
     else return this.find(root.right, data);
   }
 
+  levelOrder(root: Node, callback?: (node: Node) => Node) {
+    if (root == null) return 0;
+    let arr: Node[] = [],
+      valueArr: Number[] = [];
+    arr.push(root);
+    while (arr.length > 0) {
+      for (let i = 0; i < arr.length; i++) {
+        let node = arr.shift();
+        if (callback) callback(<Node>node);
+        valueArr.push(<Number>node?._data);
+        if (node?.left) arr.push(node.left);
+        if (node?.right) arr.push(node.right);
+      }
+    }
+    return valueArr;
+  }
+
+  height(root: Node | null): number {
+    if (root == null) return 0;
+    return Math.max(this.height(root.left), this.height(root.right)) + 1;
+  }
+
   prettyPrint(node: Node, prefix = "", isLeft = true) {
     if (node === null) {
       return;
@@ -87,7 +109,13 @@ class Tree {
   }
 }
 
-// const tree = new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
-// tree.delete(tree.root, 6345);
-// console.log(tree.find(tree.root, 67));
-// tree.prettyPrint(tree.root);
+const tree = new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
+tree.delete(tree.root, 6345);
+
+tree.prettyPrint(tree.root);
+console.log(
+  tree.levelOrder(tree.root, (node) => {
+    node.data = <number>node.data + 10;
+    return node;
+  })
+);
